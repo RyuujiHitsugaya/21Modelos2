@@ -1,72 +1,92 @@
 import random
-import math
 
-def comprobar_mano_jugador(mazo):    
-    if(mazo==[]):
-        return 0
-    else:
-        return mazo[0] + comprobar_mano_jugador(mazo[1:])
-    
-def comprobar_mano_banca(mazo):    
-    if(mazo==[]):
-        return 0
-    else:
-        return mazo[0] + comprobar_mano_banca(mazo[1:])
-        
-            
-def baraja(mazo,mazoBase,rnd,t):
-    if(len(mazo)<=40):
-        if(len(mazoBase)>=1 and t>1):
-            mazo.append(mazoBase[rnd])
-            mazoBase.pop(rnd)
-            baraja(mazo,mazoBase,
-                   math.floor(random.randrange(0,t-1)),t-1)
-    return mazo
+def mazo():
+    return [(numero,pinta) for numero in ['2','3','4','5','6','7','8','9','10','J','Q','K','A'] for pinta in ['♥','♦','♣','♥']]
 
-def Valor_as(mazo):
-    if(mazo<=10):
-        return mazo+11
-    else:
-        return mazo+1
-                    
-def jugador(baraja, mJugador,mBanca):
-    print("baraja: ",baraja)
-    print("Mano del Jugador: ", mJugador)    
-    if(len(mJugador)<2 and len(mBanca)<2):
-        jugador(baraja[2:],mJugador+[baraja[0]]+[baraja[1]],
-                mBanca+[baraja[0]]+[baraja[1]])
-    else:
-        if(comprobar_mano_jugador(mJugador)<=21):            
-            if(comprobar_mano_jugador(mJugador)==21):
-                print("Ganaste")
-            elif(input("Quiere una carta?  ")==('s' or 'S')):
-                print(len(mJugador))
-                jugador(baraja[1:],mJugador+[baraja[0]],mBanca+
-                        [baraja[math.floor(random.randrange(0,40))]])                
-            else:
-                print("Mano del Jugador: ", mJugador)
-                print(comprobar_mano_jugador(mJugador))
-                print("Mano de la Banca : ", mBanca)
-                print(comprobar_mano_banca(mBanca))
-                if(comprobar_mano_banca(mBanca)> comprobar_mano_jugador(mJugador)
-                   and comprobar_mano_banca(mBanca)<=21):
-                     print("perdiste")
-                elif(comprobar_mano_jugador(mJugador)>comprobar_mano_banca(mBanca)
-                     and comprobar_mano_jugador(mJugador)<=21):     
-                     print("Ganaste")
+def valorDe(carta,valor):
+    if (carta[0]=='2'):
+        return 2
+    if (carta[0]=='3'):
+        return 3
+    if (carta[0]=='4'):
+        return 4
+    if (carta[0]=='5'):
+        return 5
+    if (carta[0]=='6'):
+        return 6
+    if (carta[0]=='7'):
+        return 7
+    if (carta[0]=='8'):
+        return 8
+    if (carta[0]=='9'):
+        return 9
+    if (carta[0]=='10'):
+        return 10
+    if (carta[0]=='J'):
+        return 10
+    if (carta[0]=='Q'):
+        return 10
+    if (carta[0]=='K'):
+        return 10
+    if (carta[0]=='A'):
+        if(valor>10):
+            return 1
         else:
-            print(comprobar_mano_jugador(mJugador))
-            print("perdiste")
+            return 11
 
+def obtenerValor(mano):
+    if (mano==[]):
+        return 0
+    else:
+        valor=obtenerValor(mano[1:])
+        return valor+valorDe(mano[0],valor)
 
-jugador(baraja([],[1,1,1,1,2,2,2,2,
-                   3,3,3,3,4,4,4,4,
-                   5,5,5,5,6,6,6,6,
-                   7,7,7,7,8,8,8,8,
-                   9,9,9,9,10,10,10,10],
-        math.floor(random.randrange(0,40)),40),
-        [math.floor(random.randrange(1,10)),
-         math.floor(random.randrange(1,10))],
-        [math.floor(random.randrange(1,10)),
-         math.floor(random.randrange(1,10))])
+def tomarCarta(mazo):
+    if (mazo!=[]):
+        return [mazo.pop(random.randrange(len(mazo)))]
+    else:
+        return []
 
+def jugar(mazo,manoJugador,manoPc):
+    print("Tienes las cartas: ",manoJugador)
+    print("La suma de tus cartas es: ",obtenerValor(manoJugador))
+    if(obtenerValor(manoJugador)<21):
+        if (input("¿Desea tomar otra carta?(s/n)")==('s' or 'S')):
+            jugar(mazo,manoJugador+tomarCarta(mazo),manoPc)
+        else:
+            Juego(mazo,manoJugador,manoPc)
+    else:
+         Juego(mazo,manoJugador,manoPc)
+
+def Juego(mazo,manoJugador,manoPc):
+    print("La banca tiene las cartas: ",manoPc)
+    print("La suma de las cartas de la banca es: ",obtenerValor(manoPc))
+    if(obtenerValor(manoJugador)<=21):
+        if(obtenerValor(manoPc)>21):       
+            print("GANASTE con: ",manoJugador)
+        elif (obtenerValor(manoJugador)==21 and len(manoJugador)==2):
+            if(obtenerValor(manoPc)==21 and len(manoPc)==2):
+                print("EMPATE")
+            else:
+                print("GANASTE con: ",manoJugador)
+        elif(obtenerValor(manoJugador)>obtenerValor(manoPc)):
+            Juego(mazo,manoJugador,manoPc+tomarCarta(mazo)) 
+        elif(obtenerValor(manoPc)==obtenerValor(manoJugador)):
+            if(len(manoPc)==len(manoJugador)):
+                if(obtenerValor(manoJugador==21)):
+                    print("EMPATE")
+                else:
+                    Juego(mazo,manoJugador,manoPc+tomarCarta(mazo)) 
+            elif(len(manoPc)>len(manoJugador)):            
+                print("GANASTE con: ",manoJugador)
+            else:            
+                print("PERDISTE")
+        else:
+            print("PERDISTE")
+    else:
+        print("PERDISTE")            
+    
+mazo=mazo()
+manoJugador=tomarCarta(mazo)+tomarCarta(mazo)
+manoPc=tomarCarta(mazo)+tomarCarta(mazo)
+jugar(mazo,manoJugador,manoPc)
