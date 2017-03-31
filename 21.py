@@ -87,6 +87,4 @@ def Juego(mazo,manoJugador,manoPc):
         print("PERDISTE")            
     
 mazo=mazo()
-manoJugador=tomarCarta(mazo)+tomarCarta(mazo)
-manoPc=tomarCarta(mazo)+tomarCarta(mazo)
-jugar(mazo,manoJugador,manoPc)
+jugar(mazo,tomarCarta(mazo)+tomarCarta(mazo),tomarCarta(mazo)+tomarCarta(mazo))
