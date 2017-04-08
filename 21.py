@@ -1,8 +1,6 @@
 import random
-
 def mazo():
     return [(numero,pinta) for numero in ['2','3','4','5','6','7','8','9','10','J','Q','K','A'] for pinta in ['♥','♦','♣','♥']]
-
 def valorDe(carta,valor):
     if (carta[0]=='2'):
         return 2
@@ -33,20 +31,17 @@ def valorDe(carta,valor):
             return 1
         else:
             return 11
-
 def obtenerValor(mano):
     if (mano==[]):
         return 0
     else:
         valor=obtenerValor(mano[1:])
         return valor+valorDe(mano[0],valor)
-
 def tomarCarta(mazo):
     if (mazo!=[]):
         return [mazo.pop(random.randrange(len(mazo)))]
     else:
         return []
-
 def jugar(mazo,manoJugador,manoPc):
     print("Tienes las cartas: ",manoJugador)
     print("La suma de tus cartas es: ",obtenerValor(manoJugador))
@@ -56,8 +51,7 @@ def jugar(mazo,manoJugador,manoPc):
         else:
             Juego(mazo,manoJugador,manoPc)
     else:
-         Juego(mazo,manoJugador,manoPc)
-
+        Juego(mazo,manoJugador,manoPc)
 def Juego(mazo,manoJugador,manoPc):
     print("La banca tiene las cartas: ",manoPc)
     print("La suma de las cartas de la banca es: ",obtenerValor(manoPc))
@@ -85,6 +79,6 @@ def Juego(mazo,manoJugador,manoPc):
             print("PERDISTE")
     else:
         print("PERDISTE")            
-    
-mazo=mazo()
-jugar(mazo,tomarCarta(mazo)+tomarCarta(mazo),tomarCarta(mazo)+tomarCarta(mazo))
+def iniciar(mazo):
+    jugar(mazo,tomarCarta(mazo)+tomarCarta(mazo),tomarCarta(mazo)+tomarCarta(mazo))
+iniciar(mazo())
