@@ -44,7 +44,8 @@ def tomarCarta(mazo):
         return []
 def jugar(mazo,manoJugador,manoPc):
     print("Tienes las cartas: ",manoJugador)
-    print("La suma de tus cartas es: ",obtenerValor(manoJugador))
+    print("La suma de tus cartas es: ",obtenerValor(manoJugador))    
+    print("La banca tiene la carta: ",manoPc[0])
     if(obtenerValor(manoJugador)<21):
         if (input("¿Desea tomar otra carta?(s/n)")==('s' or 'S')):
             jugar(mazo,manoJugador+tomarCarta(mazo),manoPc)
